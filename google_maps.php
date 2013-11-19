@@ -83,7 +83,7 @@ END;
             if ( !trim($val) ){
                 $event->out = '';
             } else {
-                $event->out = '<input type="text" value="'.df_escape($val).'" class="xf-map"/>';
+                $event->out = '<input type="text" value="'.df_escape($val).'" class="xf-map" data-map-read-only="1"/>';
             }
         }
         

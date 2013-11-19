@@ -8,17 +8,30 @@
     function MapWidget(o){
         var self = this;
         this.input = o.input;
+        this.readOnly = o.readOnly || false;
         this.mapOpts = o.mapOpts || {};
         this.width = o.width || '100%';
         this.height = o.height || '500px';
         this.el = $('<div class="xf-map-wrapper" style="height:'+this.height+'; width:'+this.width+'"></div>').get(0);
                 //$(this.el).insertAfter(this.input);
+        if ( this.readOnly ){
+            this.mapOpts.disableDefaultUI = true;
+            this.mapOpts.panControl = false;
+            this.mapOpts.zoomControl = false;
+            this.mapOpts.scaleControl = false;
+            this.mapOpts.scrollwheel = false;
+            this.mapOpts.navigationControl = false;
+            this.mapOpts.mapTypeControl = false;
+            this.mapOpts.draggable = false;
+            this.mapOpts.disableDoubleClickZoom = true;
+        }
+        
         this.map = new google.maps.Map(this.el, this.mapOpts);
         this.markers = {};
         this.nextMarkerId = 0;
         
         this.features = o.features || {};
-        if ( this.features.addMarkers ){
+        if ( !this.readOnly && this.features.addMarkers ){
             google.maps.event.addListener(this.map, 'click', function(e){
                 self.addMarker({
                     position : e.latLng
@@ -60,10 +73,12 @@
             $(this.el).insertAfter(this.input);
             $(this.input).hide();
             this.pull();
-            $(this.input.form).submit(function(){
-                self.push();
-                return true;
-            });
+            if ( !this.readOnly ){
+                $(this.input.form).submit(function(){
+                    self.push();
+                    return true;
+                });
+            }
         },
         pull : function(){
             var self = this;
@@ -175,6 +190,10 @@
                 }
                 if ( $(this).attr('data-map-height') ){
                     atts.height = $(this).attr('data-map-height');
+                }
+                
+                if ( $(this).attr('data-map-read-only')){
+                    atts.readOnly = true;
                 }
                 
                 var widget = new MapWidget(atts);

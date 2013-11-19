@@ -26,12 +26,18 @@ class Dataface_FormTool_map {
         $atts['class'] .= ' xf-map';
         
         $atts['df:cloneable'] = 1;
-        if ( !$record->checkPermission('google_maps_addMarker', array('field'=>$field['name']))){
+        $perms = $record->getPermissions(array('field'=>$field['name']));
+        $noEdit = ($new and !@$perms['new']) or (!$new and !@$perms['edit']);
+        if ( !@$perms['google_maps_addMarker'] or $noEdit ){
             
             $atts['data-xf-override-data-map-features-addmarkers'] = "0";
         }
-        if ( !$record->checkPermission('google_maps_removeMarker', array('field'=>$field['name']))){
+        if ( !@$perms['google_maps_removeMarker'] or $noEdit ){
             $atts['data-xf-override-data-map-features-removemarkers'] = "0";
+        }
+        
+        if ( $noEdit ){
+            $atts['data-map-read-only'] = "1";
         }
               
         $mod->registerPaths();
