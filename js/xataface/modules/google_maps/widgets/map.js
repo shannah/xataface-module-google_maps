@@ -32,11 +32,18 @@
         
         this.features = o.features || {};
         if ( !this.readOnly && this.features.addMarkers ){
+            var updateTimeout = null;
+            
             google.maps.event.addListener(this.map, 'click', function(e){
-                self.addMarker({
-                    position : e.latLng
-                });
-                
+                updateTimeout = setTimeout(function(){
+                    self.addMarker({
+                        position : e.latLng
+                    });
+                }, 200);
+            });
+            
+            google.maps.event.addListener(this.map, 'dblclick', function(e){
+                clearTimeout(updateTimeout);
             });
         }
         
