@@ -147,8 +147,8 @@ The google maps module also allows you to add and remove markers from maps.  Cur
 
 By default, markers and disabled.  You will need to enable them by adding the following directives to the fields.ini file for your field:
 ```
-widget:atts:data-map-add-markers=1
-widget:atts:data-map-remove-markers=1
+widget:atts:data-map-features-addmarkers=1
+widget:atts:data-map-features-removemarkers=1
 ```
 
 You also need to ensure that your user has been granted the `google_maps_addMarker` and `google_maps_removeMarker` permissions or they won't be able to add/remove markers.  
