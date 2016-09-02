@@ -85,6 +85,7 @@ END;
             } else {
                 $event->out = '<input type="text" value="'.df_escape($val).'" class="xf-map" data-map-read-only="1"/>';
             }
+            $event->out = $record->callDelegateFunction($fieldname.'__htmlValue_google_maps', $event->out, $event->out);
         }
         
     }
